@@ -16,6 +16,7 @@ class FindFriends < Sinatra::Application
       request.websocket do |ws|
 
         ws.onopen do
+          warn('websocket open')
           if settings.sockets[path]
             settings.sockets[path].push(ws)
           else
@@ -32,12 +33,15 @@ class FindFriends < Sinatra::Application
         end
 
         ws.onmessage do |msg|
+          print msg
           EM.next_tick {
             msg = JSON.parse(msg)
             if msg['type'] == 'location-update'
               settings.sockets[path].each do |s|
                 s.send(msg.to_json)
               end
+            else
+              print msg
             end
           }
         end
