@@ -68,9 +68,11 @@ var Map = {
     // Terminates marker if no update within 10 seconds
     setTimeout(function() {
       var timeNow = Date.now()
-      if (timeNow - 9500 > this.markers[id].lastUpdated) {
-        this.markers[id].obj.setMap(null);
-        delete this.markers[id]
+      if (this.markers[id]){
+        if (timeNow - 9500 > this.markers[id].lastUpdated) {
+          this.markers[id].obj.setMap(null);
+          delete this.markers[id]
+        }
       }
     }.bind(this), 10000)
   }
